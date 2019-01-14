@@ -1,0 +1,67 @@
+\documentclass[11pt,final,hidelinks]{article}
+\usepackage[nohints]{minitoc}
+\usepackage[margin=1in]{geometry}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true,factor=1100,stretch=10,shrink=10]{microtype}
+\microtypecontext{spacing=nonfrench}
+\usepackage{graphicx}
+\graphicspath{{img/}} 
+\usepackage{algorithm2e}
+\usepackage{caption}
+\usepackage{bbm}
+\usepackage{booktabs}
+\usepackage{mathtools}
+\usepackage{subfiles}
+\usepackage{commath}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{amssymb}
+\usepackage{pgfplots}
+\usepackage{tabu}
+\usepackage{numprint}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{tikzscale}
+\usepackage[nopostdot,xindy,symbols,toc,acronym]{glossaries}
+\usepackage[square,numbers]{natbib}
+\usepackage{cleveref}
+\usepackage{siunitx}
+\usepackage[section]{placeins}
+\usepackage{listings}
+\include{defs}
+\loadglsentries{gloss}
+
+\title
+{
+    The \emph{\gls*{gls-phf}}\\
+    \large A fast and efficient implementation of the \emph{static approximate set} and the \emph{oblivious set} abstract data types.
+}
+\author
+{
+    Alexander Towell\\
+    \texttt{atowell@siue.edu}
+}
+\date{}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+We define the semantics of the \gls*{gls-approxset} and derive an immutable data structure that implements the s\emph{static} \gls*{gls-approxset}, denoted the \gls*{gls-phf}. We analyze the theoretical properties of the \gls*{gls-phf}, demonstrating that it is a \emph{succinct} data structure that asymptotically obtains the information-theoretic lower bound on the average space complexity. Finally, we provide an implementation and compare it to the theoretical analysis.
+\end{abstract}
+
+\tableofcontents
+\listoffigures
+\listofalgorithms
+
+\subfile{sections/intro}
+\subfile{sections/set_model}
+%\subfile{sections/oblivious}
+\subfile{sections/perf_hash_filter}
+\subfile{sections/typed_phf}
+\subfile{sections/appendix}
+\printglossary
+\bibliography{references}
+\end{document}

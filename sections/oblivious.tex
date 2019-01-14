@@ -1,0 +1,64 @@
+\documentclass[ ../main.tex]{subfiles}
+\providecommand{\mainx}{..}
+\begin{document}
+\section{Implementation of oblivious sets}
+Kerckhoffs's principle. Shannon's maxim.
+
+The \gls{gls-phf} described in \cref{sec:phf} is an \gls{gls-approxset} over the universe of bit strings $\cisb$. However, injections from a countable set $\mathbb{X}$ to the set $\cisb$ exist. Let us denote such an injection by
+\begin{equation}
+    \Encode \colon \mathbb{X} \mapsto \cisb\,,
+\end{equation}
+which maps every element $x \in \mathbb{X}$ to a unique element $y \in \cisb$. Note that in the \gls{gls-phf}, iterating over (or retrieving) elements is not supported and thus \Encode does not need to be decodable.
+
+For instance, if elements of type $\mathbb{X}$ are a data structure, then \Encode may be its serialization, a \emph{linear} sequence of bits.\footnote{The \emph{memory-resident} representation is machine and process-dependent and thus not a suitable representation if the \emph{typed} \gls{gls-phf} is suppose to work across multiple machines or processes.} Alternatively, if the data structure is intended to be efficiently inserted into a \gls{gls-phf}, then something like a simple \emph{hash code} may be used since it does not need to be \emph{decodable}.\footnote{If each element of $\mathbb{X}$ does not uniquely map to a hash code, then the \gls{gls-fprate} as given by $\varepsilon$ is only an approximation.}
+
+Consequently, we may map any set $\St_\mathbb{X} \subset \mathbb{X}$ to a set $\St_\cisb \subset \cisb$ so that the \gls{gls-phf} may approximate it. We denote this the \gls{gls-phf} of type $\mathbb{X}$. The \gls{gls-phf} of type $\mathbb{X}$ may approximate any \emph{finite set} $\St_\mathbb{X}$ where the elements are members of the countable set $\mathbb{X}$. See \cref{alg:PHF} for an algorithmic description of $\MakeApproxSet$ and \cref{alg:PHF_has} for an algorithmic description of $\Contains$.
+\begin{algorithm}[h]
+    \caption{Implementation of \protect\MakeApproxSet for the \emph{typed} Perfect Hash Filter}
+    \label{alg:typedPHF}
+    \SetKwProg{func}{function}{}{}
+    \KwIn
+    {
+        \begin{itemize}
+            \item[$\St_{\mathbb{X}}$] The set to approximate where the universe of elements is $\mathbb{X}$.
+            \item[$\varepsilon$] The false positive rate.
+            \item[$r$] The load factor.
+        \end{itemize}
+    }
+    \KwOut
+    {
+        A \emph{typed} \gls{gls-phf} $\Sp_{\mathbb{X}}$ that approximates $\St_{\mathbb{X}}$ with a false positive rate $\varepsilon$ and a load factor $r$.
+    }
+    \func{\MakeTypeApproxSet{$\St_{\mathbb{X}}$, $\varepsilon$ $\given$ $r$}}
+    {
+        $\St_\cisb \gets \left\{ \Encode(x) \colon x \in \St_{\mathbb{X}}\right\}$\;
+        $\Sp_{\cisb} \gets$ \MakeApproxSet{$\St_\cisb$, $\varepsilon$ $\given$ $r$}\;
+        \Return $\Sp_{\mathbb{X}}$\;
+    }
+\end{algorithm}
+\begin{algorithm}[h]
+    \caption{Implementation of \protect\Contains for the \emph{typed} Perfect Hash Filter}
+    \label{alg:typed_PHF_contains}
+    \SetKwProg{func}{function}{}{}
+    \KwIn
+    {
+        \begin{itemize}
+            \item[$\Sp_{\mathbb{X}}$] The \emph{typed} \gls{gls-phf} that approximates $\St_{\mathbb{X}} \subset \mathbb{X}$ with a false positive rate $\varepsilon$ and a load factor $r$.
+            \item[$u$] The element in $\mathbb{X}$ to test membership in $\Sp_{\mathbb{X}}$.
+        \end{itemize}
+    }
+    \KwOut
+    {
+        Returns $\True$ if $x \in \St_{\mathbb{X}}$. Otherwise, returns \True with probability $\varepsilon$ and \False with probability $1 - \varepsilon$.
+    }
+    \func{\Contains{$\Sp_{\mathbb{X}}$, $x$}}
+    {
+        $b \gets \Encode_\mathbb{X}(x)$\;
+        $q \gets$ \Contains{$\Sp_\cisb$, $b$}\;
+        \Return $q$\;
+    }
+\end{algorithm}
+
+\subsection{C++ implementation}
+Stuff for C++ goes here.
+\end{document}

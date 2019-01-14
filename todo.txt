@@ -1,0 +1,19 @@
+
+
+Increasing entropy:
+
+    (1) make load factor a r.v. as described elsewhere.
+    (2) try to make it so that the integer hashes chosen are rv's
+        that approximate a uniform distribution, rather than a geoemetric. This
+        sacrifices space efficiency for entropy / confidentiality.
+    (3) given N entries in the matrix, i.e., a max hash N (elements in
+        the set may have a max hash n < N, but N is still used for the
+        modulus), the load factor may be estimated, assuming the adversary
+        knows the algorithm used to generate the perfect hash function. thus,
+        we may need to choose integer hashes that are distributed over a
+        larger range than would be necessary in the optimal algorithm, i.e.,
+        by (2) they are uniformly distributed and thus a normal binary code may
+        be used, and by (3) we want the hashes to be r.v.'s distributed over a
+        larger range, so that the code for each is (when not compressed) larger.
+        However, (2) is the main thing.t
+        
