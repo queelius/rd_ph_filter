@@ -1,48 +1,12 @@
-\PassOptionsToPackage{unicode}{hyperref}
-\PassOptionsToPackage{naturalnames}{hyperref}
 
-\definecolor{ltgray}{rgb}{0.7,0.7,0.7}
-
-\lstset
-{
-    basicstyle=\footnotesize,               % print whole listing small
-    keywordstyle=\bfseries,
-    identifierstyle=,               % nothing happens
-    commentstyle=\itshape\color{ltgray},    % gray comments
-    %stringstyle=\ttfamily,          % typewriter type for strings
-    showstringspaces=false,         % no special string spaces
-    numbers=left,
-    numberstyle=\tiny,
-    stepnumber=1,
-    numbersep=5pt
-}
-
-\hypersetup{
-    pdftitle={The \emph{Perfect Hash Filter}},  % title
-    pdfauthor={Alexander Towell},               % author
-    pdfsubject={computer science},              % subject of the %document
-    pdfkeywords={
-        probabilistic data structure,
-        abstract data type,
-        approximate set,
-        bloom filter,
-        perfect hash function,
-        perfect hash filter},                 % keywords
-    colorlinks=true,                           % false: boxed links;
-    linkcolor=blue,
-    citecolor=green,                            % color of links to 
-    filecolor=magenta,                          % color of file links
-    urlcolor=green                              % color of external
-}
-
-\newcommand{\catop}{{+\!\!+}}
-\newcommand{\cisb}{\mathbb{B}}
-\newcommand{\rv}[1]{\mathrm{#1}}
-\newcommand{\pmf}{p}
-\newcommand{\cdf}{F}
-\newcommand{\prob}{\Pr} %\mathrm{Pr}
-\newcommand{\ith}{$i^{\text{th }}$}
-\newcommand{\setc}[1]{\overline{#1}}
+%\newcommand{\catop}{{+\!\!+}}
+%\newcommand{\cisb}{\mathbb{B}}
+%\newcommand{\rv}[1]{\mathrm{#1}}
+%\newcommand{\pmf}{p}
+%\newcommand{\cdf}{F}
+%\newcommand{\prob}{\Pr} %\mathrm{Pr}
+%\newcommand{\ith}{$i^{\text{th }}$}
+%\newcommand{\setc}[1]{\overline{#1}}
 
 \newcommand{\dudist}{\operatorname{\rm{DU}}}
 \newcommand{\berdist}{\operatorname{\rm{BER}}}
@@ -52,7 +16,7 @@
 \newcommand{\given}{{\,|\,}}
 \newcommand{\indicator}[1]{\operatorname{\mathbbm{1}_{#1}}}
 \renewcommand{\vec}[1]{\boldsymbol{\mathbf{#1}}}
-\newcommand{\matrx}[1]{\boldsymbol{#1}}
+%\newcommand{\matrx}[1]{\boldsymbol{#1}}
 \newcommand*{\euler}{\mathrm{e}}
 \newcommand{\St}{\mathbb{S}}
 \newcommand{\Sa}{\St^*}
@@ -65,8 +29,8 @@
 
 \DeclareMathOperator{\likeli}{\mathcal{L}}
 \DeclareMathOperator{\expectation}{\mathbb{E}}
-\DeclareMathOperator*{\argmax}{arg\,max}
-\DeclareMathOperator*{\argmin}{arg\,min}
+%\DeclareMathOperator*{\argmax}{arg\,max}
+%\DeclareMathOperator*{\argmin}{arg\,min}
 
 \SetKwFunction{AE}{e$^*\!$}
 \SetKwFunction{RE}{e}
@@ -124,41 +88,41 @@
 \RestyleAlgo{ruled}
 \LinesNumbered
 
-\newcounter{equationstore}
-\AtBeginEnvironment{proof}{\setcounter{equationstore}{\value{equation}}
-\setcounter{equation}{0}\renewcommand{\theequation}{\alph{equation}}}
-\AtEndEnvironment{proof}{\setcounter{equation}{\value{equationstore}}}
+%\newcounter{equationstore}
+%\AtBeginEnvironment{proof}{\setcounter{equationstore}{\value{eq%uation}}
+%\setcounter{equation}{0}\renewcommand{\theequation}{\alph{equat%ion}}}
+%\AtEndEnvironment{proof}{\setcounter{equation}{\value{equations%tore}}}
 
-\newcounter{examplecounter}
-\newenvironment{example}
-{
-    \begin{quote}%
-    \refstepcounter{examplecounter}%
-    \textbf{Example \arabic{examplecounter}}%
-    \quad
-}
-{%
-    \end{quote}%
-}
+%\newcounter{examplecounter}
+%\newenvironment{example}
+%{
+%    \begin{quote}%
+%    \refstepcounter{examplecounter}%
+%    \textbf{Example \arabic{examplecounter}}%
+%    \quad
+%}
+%{%
+%    \end{quote}%
+%}
 
-\newcounter{equationex}
-\AtBeginEnvironment{example}{\setcounter{equationex}{\value{equation}}
-\setcounter{equation}{0}\renewcommand{\theequation}{\alph{equation}}}
-\AtEndEnvironment{example}{\setcounter{equation}{\value{equationex}}}
+%\newcounter{equationex}
+%\AtBeginEnvironment{example}{\setcounter{equationex}{\value{equ%ation}}
+%\setcounter{equation}{0}\renewcommand{\theequation}{\alph{equat%ion}}}
+%\AtEndEnvironment{example}{\setcounter{equation}{\value{equatio%nex}}}
 
 
 
-\theoremstyle{plain}
-\newtheorem{theorem}{Theorem}
-\newtheorem{corollary}{Corollary}
-\newtheorem{definition}{Definition}
-\newtheorem{postulate}{Postulate}
-\newtheorem{assumption}{Assumption}
-\newtheorem{conjecture}{Conjecture}
+%\theoremstyle{plain}
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{corollary}{Corollary}
+%\newtheorem{definition}{Definition}
+%\newtheorem{postulate}{Postulate}
+%\newtheorem{assumption}{Assumption}
+%\newtheorem{conjecture}{Conjecture}
 
-\theoremstyle{remark}
-\newtheorem*{remark}{Remark}
-\newtheorem*{notation}{Notation}
+%\theoremstyle{remark}
+%\newtheorem*{remark}{Remark}
+%\newtheorem*{notation}{Notation}
 
 \setglossarystyle{list}
 \glsdisablehyper

@@ -27,47 +27,47 @@ The abstract data type of the \emph{positive approximate set} over a countably i
     &\Contains \colon \Powerset(\mathbb{U}) \times \mathbb{U} \mapsto \{ \True, \False \}\,,\\
     &\FalsePositiveRate \colon \Powerset(\mathbb{U}) \mapsto (0,1)\,.
 \end{align}
-Let an element that is selected uniformly at random from the universe $\mathbb{U}$ be denoted by $\rv{X}$. A set $\Sp$ is a \emph{positive approximate set} of a set $\St$ with a false positive rate $\varepsilon$ if the following conditions hold:
+Let an element that is selected uniformly at random from the universe $\mathbb{U}$ be denoted by $\RV{X}$. A set $\Sp$ is a \emph{positive approximate set} of a set $\St$ with a false positive rate $\fprate$ if the following conditions hold:
 \begin{enumerate}[(i)]
     \item $\St$ is a subset of $\Sp$. This condition guarantees that no \emph{false negatives} may occur.
-    \item If $\rv{X}$ is \emph{not} a member of $\St$, it is a member of $\Sp$ with a probability $\varepsilon$,
+    \item If $\RV{X}$ is \emph{not} a member of $\St$, it is a member of $\Sp$ with a probability $\fprate$,
     \begin{equation}
-        \Pr\left[\Contains\!\left(\Sp,\rv{X}\right) \given \neg \Contains\!\left(\St,\rv{X}\right)\right] = \varepsilon\,.
+        \Prob{\Contains\!\left(\Sp,\RV{X}\right) \given \neg \Contains\!\left(\St,\RV{X}\right)} = \fprate\,.
     \end{equation}
-    \item The false positive rate function returns $\varepsilon$,
+    \item The false positive rate function returns $\fprate$,
     \begin{equation}
-         \FalsePositiveRate(\Sp) = \varepsilon\,.
+         \FalsePositiveRate(\Sp) = \fprate\,.
     \end{equation}
 \end{enumerate}
 \end{definition}
 
 The optimal space complexity of \emph{countably infinite} positive approximate sets is given by the following postulate.
 \begin{postulate}
-The \emph{optimal} space complexity of a data structure implementing the \emph{positive approximate set} over \emph{countably infinite} universes is independent of the type of elements and depends only the false positive rate $\varepsilon$ as given by
+The \emph{optimal} space complexity of a data structure implementing the \emph{positive approximate set} over \emph{countably infinite} universes is independent of the type of elements and depends only the false positive rate $\fprate$ as given by
 \begin{equation}
-    -\log_2 \varepsilon \; \si{bits \per element}\,.
+    -\log_2 \fprate \; \si{bits \per element}\,.
 \end{equation}
 \end{postulate}
 
 The immutable abstract data type of the \emph{oblivious set}\cite{obset} is given by the following definition.
 \begin{definition}
 \label{def:obliviousset}
-Assuming that the only information about a set of interested $\St$ is given by another set $\Osp$, $\Osp$ is an \emph{oblivious positive set} of $\St$ with a false positive rate $\varepsilon$ if the following conditions hold:
+Assuming that the only information about a set of interested $\St$ is given by another set $\Osp$, $\Osp$ is an \emph{oblivious positive set} of $\St$ with a false positive rate $\fprate$ if the following conditions hold:
 \begin{enumerate}[(i)]
-    \item $\Osp$ is a positive approximate set of $\St$ with a false positive rate $\varepsilon$.
+    \item $\Osp$ is a positive approximate set of $\St$ with a false positive rate $\fprate$.
     \item The false positives are uniformly distributed over $\mathbb{U} \setminus \St$.
     \item There is no efficient way to enumerate the elements in $\Osp$.\footnote{That is, the true positives and false positives.}
     \item Any estimator of the cardinality of $\St$ may only be able determine an approximate upper and lower bound, where the uncertainty may be traded for space-efficiency.
 \end{enumerate}
 \end{definition}
 
-The absolute space efficiency of a data structure implementing an oblivious positive set consisting of $m$ true positives with a false positive rate $\varepsilon$ and an entropy $\beta$ is given by
+The absolute space efficiency of a data structure implementing an oblivious positive set consisting of $m$ true positives with a false positive rate $\fprate$ and an entropy $\beta$ is given by
 \begin{equation}
-    \AE(\varepsilon, m, \beta) = \expectation\!\left[\frac{-(m + \rv{X}) \log_2 \varepsilon}{\BL\!\left(\MakeObliviousSet(m + \rv{X},\varepsilon)\right)}\right]\,,
+    \AE(\fprate, m, \beta) = \expectation\!\left[\frac{-(m + \RV{X}) \log_2 \fprate}{\BL\!\left(\MakeObliviousSet(m + \RV{X},\fprate)\right)}\right]\,,
 \end{equation}
 where
 \begin{equation}
-    \rv{X} \sim \dudist(0,2^\beta - 1)\,.
+    \RV{X} \sim \dudist(0,2^\beta - 1)\,.
 \end{equation}
 
 The relative efficiency of the \emph{optimal} positive oblivious set with entropy $\beta$ to the \emph{optimal} positive approximate set ($\beta = 0$) has an expectation given by
