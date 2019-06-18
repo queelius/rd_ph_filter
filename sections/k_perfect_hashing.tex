@@ -1,98 +1,16 @@
 \documentclass[ ../main.tex]{subfiles}
 \providecommand{\mainx}{..}
 \begin{document}
-\section{$k$-perfect hashing and false negatives}
+\section{Perfect hash filters that trade time for space}
+
+$\ph_{\Set{S}} \colon \Set{U} \mapsto [0,\ldots,k]$
+
+$\operatorname{f} \colon \NatSet \mapsto \{0,1,\ldots,N\}^[t]$
+
+Compose two functions
+
+$\ph_{\Set{S}} \colon \Set{U} \mapsto \{0,1,\ldots,N\}^[t] = \operatorname{f} \circ \ph_{\Set{S}}$
 
 
 
-
-\begin{proof}
-Stamp collector problem.
-
-$\card{\mathbb{S}} = m$
-
-$N = \frac{m}{r}$
-
-\begin{equation}
-    \rv{K_j} \sim \geodist\!\left(\frac{N-1}{N}\right)
-\end{equation}
-
-
-$\Pr[\rv{K_j} \leq k] = 1 - \left(1 - \frac{N-j+1}{N}\right)^{k+1}$
-
-A maximum of $k$ hashes...
-
-$p(k) = \Pr[\rv{K_1} \leq k \cap \cdots \cap \rv{K_m} \leq k] = \prod_{j=1}^{m}\left(1 - \left(\frac{j-1}{N}\right)^{k+1}\right)$
-
-$p(k) = \Pr[\rv{K_1} \leq k \cap \cdots \cap \rv{K_m} \leq k] = \prod_{j=1}^{m-1}\left(1 - \left(\frac{j}{N}\right)^{k+1}\right)$
-
-
-$p(k) = \Pr[\rv{K_1} \leq k \cap \cdots \cap \rv{K_m} \leq k] = \prod_{j=1}^{m-1}\frac{N^{k+1} - j^{k+1}}{N^{k+1}}$
-
-
-$p(k) = \Pr[\rv{K_1} \leq k \cap \cdots \cap \rv{K_m} \leq k] = N^{-(m-1)(k+1)} \prod_{j=1}^{m-1}\left(N^{k+1} - j^{k+1}\right)$
-
-
-\end{proof}
-
-
-\Cref{alg:PHF,alg:PHF_has} describe the implementations of \MakeApproxSet and \Contains respectively.
-\begin{algorithm}[h]
-    \caption{Implementation of \protect\MakeKPerfectHashSet}
-    \label{alg:PHF}
-    \SetKwProg{func}{function}{}{}
-    \KwIn
-    {
-        \begin{itemize}
-            \item[$\St$] The set to approximate.
-            \item[$\varepsilon$] The \emph{false positive rate}.
-            \item[$k$] The maximum number of hash functions to evaulate.
-            \item[$\omega$] The \emph{false negative rate}.
-            \item[$r$] The load factor.
-        \end{itemize}
-    }
-    \KwOut
-    {
-        A $k$-perfect hash filter that approximates $\St$ with a false positive rate $\varepsilon$, false negative rate $\omega$, and load factor$r$.
-    }
-    \func{\MakeKPerfectHashSet{$\St, \varepsilon, \omega, r, k$}}
-    {
-        $\ph_{\St} \gets$ \PHFgen{$\St$, $r$}\;
-        $N \gets \left\lceil \card{\St} / r \right\rceil$\;
-        $M \gets \left\lceil -\log_2\!\left(\varepsilon\right) \right\rceil$\;
-        $\matrx{V} \gets N$-by-$M$ bit matrix\;
-        \For{$x \in \St$}
-        {
-            $i \gets \ph_{\St}\!\left(x\right)$\;
-            $h \gets$ \ro{$x$}$\mod M$\;
-            $\matrx{V}\!\left[i\right] \gets h$\;
-        }
-        \tcp{This tuple is sufficient to code the \gls{gls-phf}.}
-        \Return $\left(\matrx{V}, \ph_{\St}\right)$\;
-    }
-\end{algorithm}
-\begin{algorithm}[h]
-    \caption{Implementation of \protect\Contains}
-    \label{alg:PHF_has}
-    \SetKwProg{func}{function}{}{}
-    \KwIn
-    {
-        \begin{enumerate}
-            \item[$\Sp$] The \gls{gls-phf} data structure that approximates $\St$ with a false positive rate $\varepsilon$ and a load factor $r$.
-            \item[$x$] The bit string to test membership of in $\Sp$.
-        \end{enumerate}
-    }
-    \KwOut
-    {
-        $\True$ if $x \in \St$, otherwise $\True$ with probability $\varepsilon$ and false with probability $1 - \varepsilon$.
-    }
-    \func{\Contains{$\Sp, x$}}
-    {
-        $M \gets$ \Columns{$\matrx{V}$}\;
-        $N \gets$ \Rows{$\matrx{V}$}\;
-        $i \gets \ph_{\St}\!\left(x\right)$\;
-        $h \gets$ \ro{$x$}$ \mod N$\;
-        \Return{$\matrx{V}\!\left[i\right] = h$}\;
-    }
-\end{algorithm}
 \end{document}

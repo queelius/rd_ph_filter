@@ -1,34 +1,23 @@
 \documentclass[ ../main.tex]{subfiles}
 \providecommand{\mainx}{..}
 \begin{document}
-\chapter{Abstract data type of random approximate sets}
+\section{Abstract data type of random approximate sets}
 \label{sec:adt}
-A \emph{type} is a set and the elements of the set are called the \emph{values} 
-of the type. An \emph{abstract data type} is a type and a set of operations on 
-values of the type. For example, the \emph{integer} abstract data type is 
-defined by the set of integers and standard operations like addition and 
-subtraction.
+A \emph{type} is a set and the elements of the set are called the \emph{values} of the type. An \emph{abstract data type} is a type and a set of operations on values of the type.
+For example, the \emph{integer} abstract data type is defined by the set of integers and standard operations like addition and subtraction.
 
-A \emph{data structure} is a particular way of organizing data and may 
-implement one or more abstract data types. Two different data structures that 
-implement the abstract data type should be \emph{exchangable} in a computer 
-program without changing the outward behavior of the program.
+A \emph{data structure} is a particular way of organizing data and may implement one or more abstract data types.
+Two different data structures that implement the abstract data type should be \emph{exchangable} in a computer program without changing the outward behavior of the program.
 
-See \cref{sec:impl} to see how a C++ interface for the random approximate set 
-data type may be defined. A popular implementation of an algorithm and data 
-structure that generates approximate sets consistent with the model is known as 
-the \emph{Bloom filter}.
+See \cref{sec:impl} to see how a C++ interface for the random approximate set data type may be defined.
+A popular implementation of an algorithm and data structure that generates approximate sets consistent with the model is known as the \emph{Bloom filter}.
 
 \section{Deterministic algorithm}
-By \cref{thm:fpr,thm:fnr}, each independent observation of $\ASet{S}$ generates 
-an uncertain number of false positives and false negatives. In practice, this
-may or may not be the case.
+By \cref{thm:fpr,thm:fnr}, each independent observation of $\ASet{S}$ generates an uncertain number of false positives and false negatives.
+In practice, this may or may not be the case.
 
-Suppose we have a deterministic algorithm that generates approximate sets with 
-a specified expected false positive rate $\fprate$ and false negative rate 
-$\fnrate$. The algorithm, being deterministic, necessarily generates a certain 
-set $\Set{X}$ given an objective set $\Set{S}$. That is to say, the algorithm 
-is a \emph{total function},
+Suppose we have a deterministic algorithm that generates approximate sets with a specified expected false positive rate $\fprate$ and false negative rate $\fnrate$.
+The algorithm, being deterministic, necessarily generates a certain set $\Set{X}$ given an objective set $\Set{S}$. That is to say, the algorithm is a \emph{total function},
 	$\operatorname{f} \colon \PowerSet(\Set{U}) \mapsto \PowerSet(\Set{U})$,
 with an \emph{image}
 \begin{equation}
@@ -36,26 +25,17 @@ with an \emph{image}
     \SetBuilder{\operatorname{f}(\Set{A})}{\Set{A} \in \PowerSet(\Set{U})}
         \subseteq \PowerSet(\Set{U})\,.
 \end{equation}
-Since the function $\operatorname{f}$ may map more than one input to the same 
-output, and some sets in the codomain may not be mapped to by any set in the 
-domain, $\operatorname{f}$ is (possibly) a non-surjective, non-injective 
-function.
+Since the function $\operatorname{f}$ may map more than one input to the same output, and some sets in the codomain may not be mapped to by any set in the domain, $\operatorname{f}$ is (possibly) a non-surjective, non-injective function.
 
 \subsection{Algebraic properties}
-The only thing we can say with certainty \emph{a priori}\footnote{A priori 
-knowledge is independent of experience.}  about the image of $\operatorname{f}$ 
-is that its members are subsets of $\Set{U}$ and it contains the empty set 
-$\EmptySet$ and universal set $\Set{U}$.
+The only thing we can say with certainty \emph{a priori}\footnote{A priori knowledge is independent of experience.} about the image of $\operatorname{f}$ is that its members are subsets of $\Set{U}$ and it contains the empty set $\EmptySet$ and universal set $\Set{U}$.
 \begin{definition}
 A $\sigma$-algebra is closed under...
 \end{definition}
-The image of $\operatorname{f}$ is not necessarily a $\sigma$-algebra. However, 
-the subsets of $\Set{U}$ that may be constructed by countable complements, 
-unions, and intersections for elements of the image is by definition a 
-$\sigma$-algebra and is denoted by $\sigma(\operatorname{f})$.
+The image of $\operatorname{f}$ is not necessarily a $\sigma$-algebra.
+However, the subsets of $\Set{U}$ that may be constructed by countable complements, unions, and intersections for elements of the image is by definition a $\sigma$-algebra and is denoted by $\sigma(\operatorname{f})$.
 
-Since $\sigma(\operatorname{f})$ is a set of sets closed under unions, 
-intersections, and complements, it is a Boolean algebra defined by the six-tuple 
+Since $\sigma(\operatorname{f})$ is a set of sets closed under unions, intersections, and complements, it is a Boolean algebra defined by the six-tuple 
 $\left(
     \sigma(\operatorname{f}), \cup, \cap, \SetComplement, \EmptySet,\Set{U}
 \right)$,
@@ -73,8 +53,7 @@ $\left(
 $\left(
     \sigma(\operatorname{g}), \cup, \cap, \SetComplement, \EmptySet,\Set{U}
 \right)$,
-where $\operatorname{f}$ and $\operatorname{g}$ are distinct deterministic
-algorithms that generate approximate sets for $\PowerSet(\Set{U})$.
+where $\operatorname{f}$ and $\operatorname{g}$ are distinct deterministic algorithms that generate approximate sets for $\PowerSet(\Set{U})$.
 Set-theoretic operations over both Boolean algebras is the Boolean algebra
 $\left(
     \Sigma_{f \cup g}, \cup, \cap, \SetComplement, \EmptySet,\Set{U}
@@ -88,13 +67,7 @@ so if we take the limit
     $\lim_{n \to \infty} \Sigma_{f_1 \cup \cdots \cup f_n}$,
 where $f_1,\ldots,f_n$ are distinct mappings, $\Sigma_{f_1 \cup \cdots \cup f_n}$ converges to $\PowerSet(\Set{U})$.
 
-In practice, it is often trivial to implement a large family 
-of random approximate set
-generators with distinct Boolean algebras given a single implementation, e.g.,
-``randomly'' seeding a Bloom filter's hash function. As the size of this family
-goes to infinity, ``randomly'' selecting one of them each time we generate an 
-approximate set generates a random sample consistent with the 
-probability distribution given by \cref{dummyref}.   
+In practice, it is often trivial to implement a large family of random approximate set generators with distinct Boolean algebras given a single implementation, e.g., ``randomly'' seeding a Bloom filter's hash function. As the size of this family goes to infinity, ``randomly'' selecting one of them each time we generate an approximate set generates a random sample consistent with the probability distribution given by \cref{dummyref}.   
 
 %In some cases, it may be important for each objective set to 
 %%%have a unique approximate set. A quantity of $n$ 
@@ -583,67 +556,6 @@ See \cref{fig:cor_union_same_fprate} for a graphic illustration.
 
 
 
-
-\chapter{A C++ implementation}
-\label{sec:impl}
-\section{Generics and concepts}
-Approximate sets are a well-defined concept. Any data structure and set of 
-overloads that are consistent with the concept may be viewed as an 
-implementation of the model and may be substituted into any algorithm where 
-approximate set data types are required. Through \emph{generic} programming, we 
-may parameterize this type and place restrictions on it. This is known as C++ 
-concepts.
-
-\section{Dynamic polymorphism}
-TODO: break up each function/class/maybe method into separate listings and then
-talk about each separately.
-
-We may also use \emph{dynamic polymorphism}. A dynamic polymorphic C++ 
-interface of the \emph{approximate set} abstract data type is detailed next.
-
-%\begin{listing}
-\inputminted[breaklines,frame=lines,linenos]{c++}{code/random_approximate_sets_adt/include/approximate_set/dynamic/aset.hpp}
-%\caption{Dynamic polymorphic C++ interface for approximate sets.}
-%\label{lst:aset}
-%\end{listing}
-
-Assuming the elements of an approximate set are \emph{non-enumerable}, i.e., only membership tests may be performed using the member-of $\SetContains \colon \Set{U} \times \PowerSet(\Set{U})$ interface, set-theoretic operations may be implemented by storing each approximate set \emph{as-is} and composing them together. For example, if we are given two approximate sets $\ASet{S}[1]$ and $\ASet{S}[2]$, the union $\ASet{S}[1] \cup \ASet{S}[2]$ is implemented by performing membership tests on both $\ASet{S}[1]$ and $\ASet{S}[2]$ and returning \True if either membership test returns \True, i.e.,
-\begin{equation}
-    \SetContains[x][\left(\SetUnion[\ASet{S}[1]][\ASet{S}[2]]\right)] \equiv \left(\SetContains[x][\ASet{S}[1]]\right) \lor \left(\SetContains[x][\ASet{S}[2]]\right)\,.
-\end{equation}
-
-Any set-theoretic composition may be implemented as a combination of unions and complements as described in \cref{sec:set_theory}. A C++ implementation for taking the union of two approximate sets is given by \cref{lst:asetunion} and a C++ implementation for taking the complement of an approximate set is given by \cref{lst:asetcomp}.
-
-% code\random_approximate_sets_adt\include\approximate_set\dynamic
-
-\begin{listing}
-\inputminted[breaklines]{c++}{code/random_approximate_sets_adt/include/approximate_set/dynamic/aset_union.hpp}
-\caption{C++ implementation of the union of approximate sets.}
-\label{lst:asetunion}
-\end{listing}
-
-\begin{listing}
-\inputminted[breaklines]{c++}{code/random_approximate_sets_adt/include/approximate_set/dynamic/aset_complement.hpp}
-\caption{C++ implementation of the complement of approximate sets.}
-\label{lst:asetcomp}
-\end{listing}
-
-Any other composition may be implemented by combining unions and complements, e.g., set-intersection is given by
-\begin{minted}{c++}
-    return make_complement(make_union(
-        make_complement(s1),
-        make_complement(s2)));
-\end{minted}
-
-\section{Binary classification performance measures}
-The binary classification measures, like \emph{positive predictive value}, are implemented as well.
-
-\begin{listing}
-\inputminted[breaklines]{c++}{code/random_approximate_sets_adt/include/approximate_set/binary_classification.hpp}
-\caption{C++ implementation of the binary classification measures for 
-approximate sets.}
-\label{lst:binclass}
-\end{listing}
 
 
 

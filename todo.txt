@@ -1,4 +1,17 @@
 
+suppose we construct "perfect" hash filters with a closed hash function from S to Int.
+in a perfect hash function, no collision from S occurs. however, we may relax this
+and instead allow k collisions, such that if a collision occurs, use some open addressing
+scheme like linear or quadratic probing or double hashing, and try k-1 more times. repeat.
+if any element in S collides more than k times, another trial is triggered.
+
+perf hashing is then special case k=0 and vareps = 2^(-k) where k is bit length of filter.
+
+for k=1
+vareps = 2 alpha (1 - alpha)
+alpha = 1 - sqrt(1 - varepsilon)
+
+----
 
 Talk about how to implement the perfect hash filter and other
 such data structures as RegularType (concept) through representational equality.

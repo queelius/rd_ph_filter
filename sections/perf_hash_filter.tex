@@ -111,10 +111,10 @@ Replacing the \emph{perfect hash function} with a \emph{$k$-perfect hash functio
     }
     \func{\Contains{$\PASet{S}, x$}}
     {
-        $M \gets$ \Columns{$\matrx{V}$}\;
-        $N \gets$ \Rows{$\matrx{V}$}\;
+        $M \gets \Columns(\matrx{V})$\;
+        $N \gets \Rows(\matrx{V})$\;
         $i \gets \ph_{\Set{S}}\!\left(x\right)$\;
-        $h \gets$ \ro{$x$}$ \mod N$\;
+        $h \gets \hash(x) \mod N$\;
         \Return{$\matrx{V}\!\left[i\right] = h$}\;
     }
 \end{algorithm}
@@ -349,11 +349,19 @@ If the load factor is known, the cardinality of $\Set{S} \subset \PASet{S}$ is g
 If the load factor is not known, then the cardinality may be probabilistically estimated.
 According to \cite{}, the probability mass of the perfect hash function is given by
 \begin{equation}
-    \RV{N} \sim \pmf_{\RV{N}}(n \Given m, r) = q^{2^n-1}\left(1 - q^{2^n}\right)
+    \RV{N} \sim \PDF{n \Given m, r}[\RV{N}] = q^{2^n-1}\left(1 - q^{2^n}\right)
 \end{equation}
-where $q = 1 - \frac{(m/r)!}{(m/r)^m ((m/r)-m)!}$, $m = \Card{\Set{S}}$, and $r$ is the load factor. Since $m = N r$
+where
+\begin{equation}
+\begin{split}
+	q &= 1 - \frac{(m/r)!}{(m/r)^m ((m/r)-m)!}\,,\\
+	m &= \Card{\Set{S}}\,,\\
+\end{split}
+\end{equation}
 
-It does contain some information. We know that if the size of the vector of hashes is $m$, $\Card{\Set{S}} \geq ?$
+%Since $m = N r$
+
+It does contain some information. We know that if the bit matrix of hashes $\matrx{V}$ has $m$ rows and $k$ columns, then $\Card{\Set{S}} \leq m$ and the expected false positive rate is $\fprate=2^{-k}$.
 
 
 \begin{theorem}
