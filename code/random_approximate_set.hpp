@@ -22,7 +22,7 @@ interval span(const interval& a, const interval& b)
 
 
 template <
-    typename T,                     // T is the universal set
+    typename T,                     // sets are elements of type T
     template <typename> typename L, // L models an approximate set type
     template <typename> typename R, // R models an approximate set type
                                     // Note: L and R should be parameterized by type T
