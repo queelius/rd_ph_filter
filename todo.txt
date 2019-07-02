@@ -1,4 +1,30 @@
 
+suppose we construct "perfect" hash filters with a closed hash function from S to Int.
+in a perfect hash function, no collision from S occurs. however, we may relax this
+and instead allow k collisions, such that if a collision occurs, use some open addressing
+scheme like linear or quadratic probing or double hashing, and try k-1 more times. repeat.
+if any element in S collides more than k times, another trial is triggered.
+
+perf hashing is then special case k=0 and vareps = 2^(-k) where k is bit length of filter.
+
+for k=1
+vareps = 2 alpha (1 - alpha)
+alpha = 1 - sqrt(1 - varepsilon)
+
+----
+
+Talk about how to implement the perfect hash filter and other
+such data structures as RegularType (concept) through representational equality.
+This also works for the set-theoretic stuff like unions, power set, etc.
+by reducing to a canonical form and checking that the expression trees are
+equivalent and each hash(object) is the same. note that this requires a determinstic
+algorithm, which may not be ideal, so that the data constructor when applied to an
+objective set maps to the same approx set representation always.
+
+note: if show an encrypted search app, then an efficient expression tree may be used
+and in the end traverse the document collection and insert them into a flat iterable
+set and just do a simple equality comparison.
+
 
 Increasing entropy:
 

@@ -25,19 +25,72 @@
 \usepackage{hyperref}
 \usepackage{tikz}
 \usepackage{tikzscale}
-\usepackage[nopostdot,xindy,symbols,toc,acronym]{glossaries}
 \usepackage[square,numbers]{natbib}
 \usepackage{cleveref}
 \usepackage{siunitx}
 \usepackage[section]{placeins}
 \usepackage{listings}
+\usepackage{minted}
+
+\usepackage[xindy,symbols,toc,acronym]{glossaries}
+\loadglsentries{gls-custom}
+\loadglsentries{gls-approxset}
+\loadglsentries{gls-set}
+\loadglsentries{gls-hashing}
+
+
 \include{defs}
-\loadglsentries{gloss}
+
+\usepackage{alexmisc}
+\usepackage{algorithmnotation}
+\usepackage{matrixnotation}
+\usepackage[fancy]{setnotation}
+\usepackage[fancy]{relationnotation}
+\usepackage{approxsetnotation}
+\usepackage[section]{envnotation}
+
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{naturalnames}{hyperref}
+
+\definecolor{ltgray}{rgb}{0.7,0.7,0.7}
+
+\lstset
+{
+	basicstyle=\footnotesize,               % print whole listing small
+	keywordstyle=\bfseries,
+	identifierstyle=,               % nothing happens
+	commentstyle=\itshape\color{ltgray},    % gray comments
+	%stringstyle=\ttfamily,          % typewriter type for strings
+	showstringspaces=false,         % no special string spaces
+	numbers=left,
+	numberstyle=\tiny,
+	stepnumber=1,
+	numbersep=5pt
+}
+
+\hypersetup{
+	pdftitle={The \emph{Perfect Hash Filter}},  % title
+	pdfauthor={Alexander Towell},               % author
+	pdfsubject={computer science},              % subject of the %document
+	pdfkeywords={
+		probabilistic data structure,
+		abstract data type,
+		approximate set,
+		bloom filter,
+		perfect hash function,
+		perfect hash filter},                 % keywords
+	colorlinks=true,                           % false: boxed links;
+	linkcolor=blue,
+	citecolor=green,                            % color of links to 
+	filecolor=magenta,                          % color of file links
+	urlcolor=green                              % color of external
+}
+
 
 \title
 {
     The \emph{\gls*{gls-phf}}\\
-    \large A fast and efficient implementation of the \emph{static approximate set} and the \emph{oblivious set} abstract data types.
+    \large A fast and efficient implementation of the \emph{random positive approximate set} abstract data types.
 }
 \author
 {
@@ -59,8 +112,9 @@ We define the semantics of the \gls*{gls-approxset} and derive an immutable data
 \subfile{sections/intro}
 \subfile{sections/set_model}
 %\subfile{sections/oblivious}
-%\subfile{sections/k_perfect_hashing}
-\subfile{sections/adt}
+\subfile{sections/k_perfect_hashing}
+\subfile{sections/cpp_imp}
+\subfile{sections/aset_adt}
 \subfile{sections/perf_hash_filter}
 \subfile{sections/typed_phf}
 \subfile{sections/appendix}
