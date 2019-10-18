@@ -29,3 +29,6 @@ main.synctex.gz
 *.glo
 *.gls
 *.ist
+*.mtc
+*.mtc0
+*.out
