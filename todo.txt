@@ -1,4 +1,6 @@
 
+
+
 suppose we construct "perfect" hash filters with a closed hash function from S to Int.
 in a perfect hash function, no collision from S occurs. however, we may relax this
 and instead allow k collisions, such that if a collision occurs, use some open addressing
