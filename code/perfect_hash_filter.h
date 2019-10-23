@@ -4,8 +4,7 @@
 // in S is in S* with a probability
 //     false_positive_rate().
 template <class H>
-class perfect_hash_filter:
-    public approximate_set<byte_string>
+class perfect_hash_filter
 {
 public:
     typedef H perfect_hash_function;
