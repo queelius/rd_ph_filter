@@ -12,13 +12,13 @@ For instance, if elements of type $\Set{X}$ are a data structure, then \Encode m
 
 Consequently, we may map any set $\Set{S} \subset \Set{X}$ to one or more elements in the set $\BitSet^*$ so that the \gls{gls-phf} may approximate it. We denote this the \gls{gls-phf} of type $\Set{X}$. The \gls{gls-phf} of type $\Set{X}$ may approximate any \emph{finite set} $\Set{S}$ where the elements are members of the countable set $\Set{X}$. See \cref{alg:PHF} for an algorithmic description of $\MakeApproxSet$ and \cref{alg:PHF_has} for an algorithmic description of $\Contains$.
 \begin{algorithm}[h]
-    \caption{Implementation of \protect\MakeApproxSet for the \emph{typed} Perfect Hash Filter}
+    \caption[Approximate hash set data constructor]{Approximate hash set implementation of $\MakeApproxSet \colon \PS{T} \mapsto \PS{\AT{T}}$.}
     \label{alg:typedPHF}
     \SetKwProg{func}{function}{}{}
     \KwIn
     {
         \begin{itemize}
-            \item[$\Set{S}$] The set to approximate where the universe of elements is $\Set{X}$.
+            \item[$\Set{S}$] The set to approximate where the universe of elements is $\Set{}$.
             \item[$\fprate$] The false positive rate.
             \item[$r$] The load factor.
         \end{itemize}
@@ -27,32 +27,36 @@ Consequently, we may map any set $\Set{S} \subset \Set{X}$ to one or more elemen
     {
         A \emph{typed} \gls{gls-phf} $\PASet{S}(\fprate)$ with a load factor $r$.
     }
-    \func{\MakeTypeApproxSet{$\Set{S}$, $\fprate$ $\Given$ $r$}}
+    \func{\FuncSty{make\_typed\_approx\_set}{$\Set{S}$, $\fprate$ $\Given$ $r$}}
     {
         $\Set{A} \gets \SetBuilder{ \Encode(x) \in \BitSet^*}{ x \in \Set{S} }$\;
         $\PASet{S}[\BitSet^{*}] \gets$ \MakeApproxSet{$\Set{A}$, $\fprate$ $\Given$ $r$}\;
         \Return $\PASet{S}[\BitSet^{*}]$\;
     }
 \end{algorithm}
+
+
 \begin{algorithm}[h]
-    \caption{Implementation of \protect\Contains for the \emph{typed} Perfect Hash Filter}
+    \caption[Approximate hash set contains]{Implementation of $\Contains \colon \PS{\AT{T}} \times T \mapsto \Bool$.}
     \label{alg:typed_PHF_contains}
     \SetKwProg{func}{function}{}{}
     \KwIn
     {
         \begin{itemize}
-            \item[$\Sp_{\Set{X}}$] The \emph{typed} \gls{gls-phf} that approximates $\Set{S}_{\Set{X}} \subset \Set{X}$ with a false positive rate $\fprate$ and a load factor $r$.
-            \item[$u$] The element in $\Set{X}$ to test membership in $\Sp_{\Set{X}}$.
+            \item[$\PASet{X}$] The \gls{gls-phf} of type $\PS{\AT{T}}$ that approximates an objective set $\Set{X}$ of type $\PS{T}$ with a false positive rate $\fprate$.
+            \item[$x$] The element of type $T$ to test membership in $\AT{X}$.
         \end{itemize}
     }
     \KwOut
     {
-        Returns $\True$ if $x \in \Set{S}_{\Set{X}}$. Otherwise, returns \True with probability $\fprate$ and \False with probability $1 - \fprate$.
+        Returns \True if $x \in \Set{X}$. Otherwise, returns \True with probability $\fprate$ and \False with probability $1 - \fprate$.
     }
-    \func{\Contains{$\Sp_{\Set{X}}$, $x$}}
+    \func{\Contains{$\PASet{X}$, $x$}}
     {
-        $b \gets \Encode_\Set{X}(x)$\;
-        $q \gets$ \Contains{$\Sp_\BitSet^{*}$, $b$}\;
+    	\tcp{The approximate hash set is a product type $\BitSet^{n \times m} \times \DataSty{PH}$ where $n$ is a function of the load factor
+    	\tcp{$\Encode_T \colon T \mapsto \BitSet^{*}$ is a serializer for $T$.}
+        $b \gets \Encode_T(x)$\;
+        $q \gets$ \Contains{$\Set{X}_{\BitSet^{*}}$, $b$}\;
         \Return $q$\;
     }
 \end{algorithm}

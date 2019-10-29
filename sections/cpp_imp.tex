@@ -16,7 +16,7 @@ We may also use \emph{dynamic polymorphism}. A dynamic polymorphic C++
 interface of the \emph{random approximate set} abstract data type is detailed next.
 
 %\begin{listing}
-\inputminted[breaklines,frame=lines,linenos]{c++}{code/random_approximate_sets_adt/include/approximate_set/dynamic/aset.hpp}
+%\inputminted[breaklines,frame=lines,linenos]{c++}{code/random_approximate_sets_adt/include/approximate_set/dynamic%/aset.hpp}
 %\caption{Dynamic polymorphic C++ interface for approximate sets.}
 %\label{lst:aset}
 %\end{listing}
@@ -30,17 +30,17 @@ Any set-theoretic composition may be implemented as a combination of unions and 
 
 % code\random_approximate_sets_adt\include\approximate_set\dynamic
 
-\begin{listing}
-	\inputminted[breaklines]{c++}{code/random_approximate_sets_adt/include/approximate_set/dynamic/aset_union.hpp}
-	\caption{C++ implementation of the union of approximate sets.}
-	\label{lst:asetunion}
-\end{listing}
+%\begin{listing}
+%	\inputminted[breaklines]{c++}{code/random_approximate_sets_adt/include/approximate_set/dynamic/aset_union.hpp}
+%	\caption{C++ implementation of the union of approximate sets.}
+%	\label{lst:asetunion}
+%\end{listing}
 
-\begin{listing}
-	\inputminted[breaklines]{c++}{code/random_approximate_sets_adt/include/approximate_set/dynamic/aset_complement.hpp}
-	\caption{C++ implementation of the complement of approximate sets.}
-	\label{lst:asetcomp}
-\end{listing}
+%\begin{listing}
+%	%\inputminted[breaklines]{c++}{code/random_approximate_sets_adt/include/approximate_set/dynamic/aset_complement.hpp%}
+%	\caption{C++ implementation of the complement of approximate sets.}
+%	\label{lst:asetcomp}
+%\end{listing}
 
 Other compositions may be implemented by composing set-union and set-complement, e.g., set-intersection is given by
 \begin{minted}{c++}

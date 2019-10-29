@@ -78,7 +78,7 @@ Replacing the \emph{perfect hash function} with a \emph{$k$-perfect hash functio
     {
         A \gls{gls-phf} that approximates $\Set{S}$ with a \gls{gls-fprate} $\fprate$ and a \gls{gls-loadfactor} $r$.
     }
-    \func{\MakeApproxSet{$\Set{S}, \fprate \given r$}}
+    \func{\MakeApproxSet{$\Set{S}, \fprate \Given r$}}
     {
         $\ph_{\Set{S}} \gets$ \PHFgen{$\Set{S}$, $r$}\;
         $N \gets \left\lceil \Card{\Set{S}} / r \right\rceil$\;
@@ -94,6 +94,7 @@ Replacing the \emph{perfect hash function} with a \emph{$k$-perfect hash functio
         \Return $\left(\matrx{V}, \ph_{\Set{S}}\right)$\;
     }
 \end{algorithm}
+
 \begin{algorithm}[h]
     \caption{Implementation of \protect\Contains}
     \label{alg:PHF_has}
@@ -107,7 +108,7 @@ Replacing the \emph{perfect hash function} with a \emph{$k$-perfect hash functio
     }
     \KwOut
     {
-        $\True$ if $x \in \Set{S}$, otherwise $\True$ with probability $\fprate$ and false with probability $1 - \fprate$.
+        \True if $x \in \Set{S}$, otherwise \True with probability $\fprate$ and false with probability $1 - \fprate$.
     }
     \func{\Contains{$\PASet{S}, x$}}
     {
@@ -446,25 +447,25 @@ Thus, without knowing how $t$ was chosen, we can only infer that the approximate
 which is the \emph{maximum} efficiency possible for an approximate set with $\log_2 t$ entropy for the cardinality.
 
 \subsection{C++ implementation}
-\lstinputlisting
-[
-    float,
-    language=c++,
-    frame=lines,
-    label={code:sas},
-    caption={The C++ interface of the \emph{static approximate set}} abstract data type
-]
-{code/approximate_set.h}
+%\lstinputlisting
+%[
+%    float,
+%    language=c++,
+%    frame=lines,
+%    label={code:sas},
+%    caption={The C++ interface of the \emph{static approximate set}} abstract data type
+%]
+%{code/approximate_set.h}
 
-\lstinputlisting
-[
-    float,
-    language=c++,
-    frame=lines,
-    label={code:phf},
-    caption={The C++ interface of the \gls{gls-phf}}
-]
-{code/perfect_hash_filter.h}
+%\lstinputlisting
+%[
+%    float,
+%    language=c++,
+%    frame=lines,
+%    label={code:phf},
+%    caption={The C++ interface of the \gls{gls-phf}}
+%]
+%{code/perfect_hash_filter.h}
 
 
 The theoretical \gls{gls-phf} based off of the random oracle as described by \cite{oph} is not tractable. Its purpose was to demonstrate theoretical properties.
