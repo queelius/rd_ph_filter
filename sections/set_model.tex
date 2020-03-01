@@ -1,7 +1,7 @@
 \documentclass[ ../main.tex]{subfiles}
 \providecommand{\mainx}{..}
 \begin{document}
-\section{Approximate and oblivious positive sets}
+\section{Approximate and oblivious sets}
 A set is given by the following definition.
 \begin{definition}
 A set is an unordered collection of distinct elements from a universe of elements.
@@ -49,18 +49,18 @@ The \emph{optimal} space complexity of a data structure implementing the \emph{p
 The immutable abstract data type of the \emph{oblivious set}\cite{obset} is given by the following definition.
 \begin{definition}
 \label{def:obliviousset}
-Assuming that the only information about a set of interested $\Set{S}$ is given by another set $\Osp$, $\Osp$ is an \emph{oblivious positive set} of $\Set{S}$ with a false positive rate $\fprate$ if the following conditions hold:
+Assuming that the only information about a set of interested $\Set{S}$ is given by another set $\OT{\Set{S}}$, $\OT{\Set{S}}$ is an \emph{oblivious positive set} of $\Set{S}$ with a false positive rate $\fprate$ if the following conditions hold:
 \begin{enumerate}[(i)]
-    \item $\Osp$ is a positive approximate set of $\Set{S}$ with a false positive rate $\fprate$.
+    \item $\OT{\Set{S}}$ is a positive approximate set of $\Set{S}$ with a false positive rate $\fprate$.
     \item The false positives are uniformly distributed over $\Set{U} \setminus \Set{S}$.
-    \item There is no efficient way to enumerate the elements in $\Osp$.\footnote{That is, the true positives and false positives.}
+    \item There is no efficient way to enumerate the elements in $\OT{\Set{S}}$.\footnote{That is, the true positives and false positives.}
     \item Any estimator of the cardinality of $\Set{S}$ may only be able determine an approximate upper and lower bound, where the uncertainty may be traded for space-efficiency.
 \end{enumerate}
 \end{definition}
 
 The absolute space efficiency of a data structure implementing an oblivious positive set consisting of $m$ true positives with a false positive rate $\fprate$ and an entropy $\beta$ is given by
 \begin{equation}
-    \AE(\fprate, m, \beta) = \expectation\!\left[\frac{-(m + \RV{X}) \log_2 \fprate}{\BL\!\left(\MakeObliviousSet(m + \RV{X},\fprate)\right)}\right]\,,
+    \AbsoluteEfficiency(\fprate, m, \beta) = \Expect{\frac{-(m + \RV{X}) \log_2 \fprate}{\BL\!\left(\MakeObliviousSet(m + \RV{X},\fprate)\right)}}\,,
 \end{equation}
 where
 \begin{equation}

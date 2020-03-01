@@ -47,7 +47,7 @@ The \gls{gls-phf} is a data structure that implements\footnote{In \cref{thm:fp_r
 
 The \emph{Perfect Hash Filter} is a product type $\textrm{PerfectHashFilter} = \textrm{BitMatrix} \times \textrm{PerfectHash}$ and a set of functions
 \begin{enumerate}
-\item $\Contains \colon \BitSet^* \times \textrm{PerfectHashFilter}]$
+\item $\SetContains \colon \BitSet^* \times \textrm{PerfectHashFilter}]$
 \end{enumerate}
 
 
@@ -61,42 +61,77 @@ The \emph{minimal} perfect hash filter is a perfect hash filter with a load fact
 \end{definition}
 Replacing the \emph{perfect hash function} with a \emph{$k$-perfect hash function}, where disjoint subsets of up to $k$ elements may collide, generalizes the \gls{gls-phf} into an approximate set where both \emph{false positives} and \emph{false negatives} are possible.\footnote{We may also simply approximate a subset of a set $\Set{S}$ to support non-zero false negative rates, but \emph{$k$-perfect hashing} generates a more efficient solution.}
 
-\Cref{alg:PHF,alg:PHF_has} describe the implementations of \MakeApproxSet and \Contains respectively.
+
+
+
+
+
+The \emph{data type} for the perfect hash filter over the universal set $\Set{U}$ is defined as $\PHF(\Set{U}) = \PH(\Set{U}) \times \BitMatrix$.
+A constructor for \PHF with a load factor $r$,
+\begin{equation}
+\phf \colon \PS{\Set{U}} \times \RealSet \mapsto \PH\,,
+\end{equation}
+is defined as
+\begin{equation}
+\ph(\Set{X}, r) \coloneqq \Tuple{n',N}
+\end{equation}
+where
+\begin{equation}
+\begin{split}
+m			& \coloneqq \Card{\Set{X}}\,, N \coloneqq \lceil m / r \rceil\,,k \coloneqq \lceil\log_2 N\rceil\\
+\beta(x,n) 	& \coloneqq \trunc\!\left(\ro(x' \cat n'),k\right)' \mod N\,,\\
+\Set{Y}[n] 	& \coloneqq \SetBuilder{\beta(x,n) \in \{0,\ldots,N-1\}}{x \in 
+	\Set{X}}\,,\\
+n 			& \coloneqq \min{\SetBuilder{ j \in \NatSet }{ \Set{Y}[j] \in \PS{\NatSet} \land \Card{\Set{Y}[j]} = m}}\,.
+\end{split}
+\end{equation}
+
+
+
+
+
+
+
+
+%\Cref{alg:PHF,alg:PHF_has} describe the implementations of \MakeApproxSet and $\SetContains$ respectively.
 \begin{algorithm}[h]
-    \caption{Implementation of \protect\MakeApproxSet}
     \label{alg:PHF}
     \SetKwProg{func}{function}{}{}
     \KwIn
     {
         \begin{itemize}
-            \item[$\Set{S}$] The \gls{gls-finiteset} to approximate.
-            \item[$\fprate$] The \gls{gls-fprate}.
-            \item[$r$] The \gls{gls-loadfactor}.
+            \item[$\Set{S}$] The objective set to approximate.
+            \item[$\fprate$] The false positive rate.
+            \item[$r$] The load factor.
         \end{itemize}
     }
     \KwOut
     {
-        A \gls{gls-phf} that approximates $\Set{S}$ with a \gls{gls-fprate} $\fprate$ and a \gls{gls-loadfactor} $r$.
+        A perfect hash filter that approximates $\Set{S}$ with a false positive rate $\fprate$ and a load factor $r$.
     }
     \func{\MakeApproxSet{$\Set{S}, \fprate \Given r$}}
     {
-        $\ph_{\Set{S}} \gets$ \PHFgen{$\Set{S}$, $r$}\;
+        $\ph_{\Set{S}} \gets \text{perfect hash of $\Set{S}$ with load factor $r$}$\;
         $N \gets \left\lceil \Card{\Set{S}} / r \right\rceil$\;
-        $M \gets \left\lceil -\log_2\!\left(\fprate\right) \right\rceil$\;
+        $M \gets \left\lceil -\log_2 \fprate \right\rceil$\;
         $\matrx{V} \gets N$-by-$M$ bit matrix\;
         \For{$x \in \Set{S}$}
         {
-            $i \gets \ph_{\Set{S}}\!\left(x\right)$\;
+            $i \gets \ph_{\Set{S}}(x)$\;
             $h \gets$ \ro{$x$}$\mod M$\;
-            $\matrx{V}\!\left[i\right] \gets h$\;
+            $\matrx{V}[i] \gets h$\;
         }
         \tcp{This tuple is sufficient to code the \gls{gls-phf}.}
-        \Return $\left(\matrx{V}, \ph_{\Set{S}}\right)$\;
+        \Return $\Tuple{\matrx{V}, \ph_{\Set{S}}}$\;
     }
 \end{algorithm}
 
+%   \caption{Implementation of \protect\MakeApproxSet}
+
+
+\COMMENT{
 \begin{algorithm}[h]
-    \caption{Implementation of \protect\Contains}
+    \caption{Implementation of $\protect\SetContains$}
     \label{alg:PHF_has}
     \SetKwProg{func}{function}{}{}
     \KwIn
@@ -110,15 +145,16 @@ Replacing the \emph{perfect hash function} with a \emph{$k$-perfect hash functio
     {
         \True if $x \in \Set{S}$, otherwise \True with probability $\fprate$ and false with probability $1 - \fprate$.
     }
-    \func{\Contains{$\PASet{S}, x$}}
+    \func{$\SetContains[\PASet{S}][x]$}
     {
         $M \gets \Columns(\matrx{V})$\;
         $N \gets \Rows(\matrx{V})$\;
-        $i \gets \ph_{\Set{S}}\!\left(x\right)$\;
+        $i \gets \ph_{\Set{S}}(x)$\;
         $h \gets \hash(x) \mod N$\;
-        \Return{$\matrx{V}\!\left[i\right] = h$}\;
+        \Return row $i$ of $\matrx{V}$ is $h$\;
     }
 \end{algorithm}
+}
 
 \begin{example}
 Consider a set $\Set{S} = \{x_1, x_2, x_3\}$ and suppose we wish to approximate this set with a false positive rate $\fprate = 2^{-3}$. The perfect hash filter depicted by \cref{fig:PHFilter} is a representation of this \emph{frozen approximate set}.
@@ -159,7 +195,7 @@ For the \gls{gls-phf} to be an implementation of approximate set $\PASet{S} \sup
 \end{enumerate}
 
 First, we prove condition \ref{itm:fp_rate_1}. For some $x \in \BitStringSet$,
-let $i = \ph_{\Set{X}}(x)$. For \Contains{$\PASet{S}$,$x$} to return \True, row $\matrx{V}[i]$ must equal the hash given by \hash{$x$}. Since \ph$_{\Set{S}}$ perfectly hashes all $y \in \Set{S}$ and $x \in \Set{S}$, no other member of $\Set{S}$ hashes ?, and $\matrx{V}[i]$ is explicitly set to the hash $\hash(x)$ during the construction of the \gls{gls-phf} as given by \cref{alg:PHF}.
+let $i = \ph_{\Set{X}}(x)$. For $\SetContains[\PASet{S}][x]$ to return \True, row $\matrx{V}[i]$ must equal the hash given by \hash{$x$}. Since \ph$_{\Set{S}}$ perfectly hashes all $y \in \Set{S}$ and $x \in \Set{S}$, no other member of $\Set{S}$ hashes ?, and $\matrx{V}[i]$ is explicitly set to the hash $\hash(x)$ during the construction of the \gls{gls-phf} as given by \cref{alg:PHF}.
 
 Second, we prove condition \ref{itm:fp_rate_2}. Observe that $\ph_{\Set{S}}$ is a hash function that takes any $x \in \BitSet^*$ and maps it to an integer between $1$ and $N$. The corresponding row of $\matrx{V}$ consists of $M$ bits. There are $2^M$ possible bit strings of length $M$ and, by \cref{asm:ro}, \hash uniformly distributes over these possibilities. Thus, for $x \notin \Set{S}$, the probability that \hash{$x$} is equal to the corresponding $M$ bits is given by the false positive rate
 \begin{equation}

@@ -76,45 +76,6 @@
 \SetKwInOut{KwIn}{in}
 \SetKwInOut{KwOut}{out}    
 
-\RestyleAlgo{ruled}
-\LinesNumbered
-
-%\newcounter{equationstore}
-%\AtBeginEnvironment{proof}{\setcounter{equationstore}{\value{eq%uation}}
-%\setcounter{equation}{0}\renewcommand{\theequation}{\alph{equat%ion}}}
-%\AtEndEnvironment{proof}{\setcounter{equation}{\value{equations%tore}}}
-
-%\newcounter{examplecounter}
-%\newenvironment{example}
-%{
-%    \begin{quote}%
-%    \refstepcounter{examplecounter}%
-%    \textbf{Example \arabic{examplecounter}}%
-%    \quad
-%}
-%{%
-%    \end{quote}%
-%}
-
-%\newcounter{equationex}
-%\AtBeginEnvironment{example}{\setcounter{equationex}{\value{equ%ation}}
-%\setcounter{equation}{0}\renewcommand{\theequation}{\alph{equat%ion}}}
-%\AtEndEnvironment{example}{\setcounter{equation}{\value{equatio%nex}}}
-
-
-
-%\theoremstyle{plain}
-%\newtheorem{theorem}{Theorem}
-%\newtheorem{corollary}{Corollary}
-%\newtheorem{definition}{Definition}
-%\newtheorem{postulate}{Postulate}
-%\newtheorem{assumption}{Assumption}
-%\newtheorem{conjecture}{Conjecture}
-
-%\theoremstyle{remark}
-%\newtheorem*{remark}{Remark}
-%\newtheorem*{notation}{Notation}
-
 \setglossarystyle{list}
 \glsdisablehyper
 \makeglossaries
@@ -125,9 +86,3 @@
 \usetikzlibrary{calc,decorations.markings}
 
 \graphicspath{{img/}} 
-
-\crefformat{chapter}{\S#2#1#3}
-\crefmultiformat{chapter}{\S\S#2#1#3}{and~#2#1#3}{, #2#1#3}{, and~#2#1#3}
-
-\crefformat{section}{\S#2#1#3}
-\crefmultiformat{section}{\S\S#2#1#3}{and~#2#1#3}{, #2#1#3}{, and~#2#1#3}

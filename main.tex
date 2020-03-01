@@ -1,5 +1,6 @@
 \documentclass[11pt,final,hidelinks]{article}
 \usepackage[nohints]{minitoc}
+\usepackage{lmodern}
 \usepackage[margin=1in]{geometry}
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
@@ -31,28 +32,37 @@
 \usepackage[section]{placeins}
 \usepackage{listings}
 \usepackage{minted}
-
 \usepackage[xindy,symbols,toc,acronym]{glossaries}
+
+\newcommand{\COMMENT}[1]{}
+\makeglossaries
 \loadglsentries{gls-custom}
 \loadglsentries{gls-approxset}
 \loadglsentries{gls-set}
 \loadglsentries{gls-hashing}
 
+%\include{defs}
 
-\include{defs}
-
-\usepackage{alexmisc}
+\usepackage{functionnotation}
 \usepackage{algorithmnotation}
 \usepackage{matrixnotation}
 \usepackage[fancy]{setnotation}
 \usepackage[fancy]{relationnotation}
 \usepackage{approxsetnotation}
 \usepackage[section]{envnotation}
+\usepackage{obliviousnotation}
 
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{naturalnames}{hyperref}
 
 \definecolor{ltgray}{rgb}{0.7,0.7,0.7}
+
+\SetKwFunction{Encode}{encode}
+\SetKwFunction{Rows}{nrows}
+\SetKwFunction{Columns}{ncols}
+\SetKwFunction{MakeApproxSet}{make\_approximate\_set}
+\SetKwFunction{MakeObliviousSet}{make\_cipher\_set}
+
 
 \lstset
 {
@@ -106,17 +116,17 @@ We define the semantics of the \gls*{gls-approxset} and derive an immutable data
 \end{abstract}
 
 \tableofcontents
-\listoffigures
-\listofalgorithms
+%\listoffigures
+%\listofalgorithms
 
 \subfile{sections/intro}
 \subfile{sections/set_model}
 %\subfile{sections/oblivious}
-\subfile{sections/k_perfect_hashing}
+%\subfile{sections/k_perfect_hashing}
 \subfile{sections/cpp_imp}
-\subfile{sections/aset_adt}
-\subfile{sections/perf_hash_filter}
-\subfile{sections/typed_phf}
+%\subfile{sections/aset_adt}
+% \subfile{sections/perf_hash_filter}
+%\subfile{sections/typed_phf}
 \subfile{sections/appendix}
 \printglossary
 \bibliography{references}
