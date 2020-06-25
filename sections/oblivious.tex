@@ -15,7 +15,7 @@ For instance, if elements of type $\Set{X}$ are a data structure, then \Encode m
 Consequently, we may map any set $\Set{S}_{\Set{X}} \subset \Set{X}$ to a set $\Set{S}_{\BitSet^{*}} \subset \BitSet^{*}$ so that the \gls{gls-phf} may approximate it.
 We denote this the \gls{gls-phf} of type $\Set{X}$.
 The \gls{gls-phf} of type $\Set{X}$ may approximate any \emph{finite set} $\Set{S}_{\Set{X}}$ where the elements are members of the countable set $\Set{X}$.
-See \cref{alg:PHF} for an algorithmic description of $\MakeApproxSet$ and \cref{alg:PHF_has} for an algorithmic description of $\Contains$.
+See \cref{alg:PHF} for an algorithmic description of $\MakeApproxSet$ and \cref{alg:PHF_has} for an algorithmic description of the membership predicate.
 \begin{algorithm}[h]
     \caption{Implementation of \protect\MakeApproxSet for the \emph{typed} Perfect Hash Filter}
     \label{alg:typedPHF}
