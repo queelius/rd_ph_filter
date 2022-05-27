@@ -1,4 +1,4 @@
-# Rate-distorted hash filter (RDF)
+# Perfect hash filter: a practical implementation of the Bernoulli set
 
 RDF is a data type that models the concept of the rate-distorted set, which
 is a kind of random approximate set.
