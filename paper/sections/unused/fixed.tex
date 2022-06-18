@@ -1,0 +1,92 @@
+\documentclass[ ../main.tex]{subfiles}
+\providecommand{\mainx}{..}
+\begin{document}
+The \emph{\gls{gls-pmf}} is a data structure given by the following definition.
+\begin{definition}
+The \emph{\gls{gls-pmf}} is a data structure that implements the abstract data type of the \emph{static approximate map} where the keys are from the universe $\BitSet$ and the values are from the universe $\BitSet^p$.
+
+The data structure is denoted by $\pmapf$ and its representation of an approximate map $\Mp \supset \Mt$ with a false positive rate $\fprate$, $p$-bit values, and load factor $r$ is denoted by
+\begin{equation}
+    \pmapf(\Set{S}, \fprate, p, r)\,.
+\end{equation}
+As a convenience, the \emph{minimal} perfect map filter $\pmapf(\,\cdot\,,\,\cdot\,,\,\cdot\,,r=1)$ is denoted by $\pmapf(\,\cdot\,,\,\cdot,\,\cdot\,)$, where the fourth parameter $r$ is dropped if it is equal to $1$.
+\end{definition}
+
+
+An \emph{approximate map} from $\BitSet$ to $\BitSet^p$ represents a \emph{many}-to-\emph{one} relationship between countably infinite subsets of $\BitSet$ and subsets of $\BitSet^p$.
+
+\begin{example}
+Consider a map $\Mt = \left\{(k_1, v_1), (k_2, v_2), k_3, v_3)\right\}$ and suppose we wish to approximate this map with a false positive rate $\fprate = 2^{-3}$. The perfect map filter
+\[
+    \pmapf\left(\Mt, \fprate = 2^{-3}, p=2, r=\frac{3}{5}\right)
+\]
+implements this approximation, assuming $2$-bit values. See \Cref{fig:pmapfilter} for a visualization.
+\end{example}
+\begin{figure}
+\caption{The \emph{fixed-length} Perfect Map Filter \protect$\pmapf\!\left(3,0.125,2,0.6\right)$}
+\label{fig:pmapfilter}
+\centering
+\input{img/phfilter_extended}
+\end{figure}
+
+\begin{algorithm}
+\label{alg:pmf}
+    \SetKwProg{func}{function}{}{}
+    \KwIn
+    {
+        \begin{itemize}
+            \item[$\Mt$] The map to approximate.
+            \item[$\fprate$] The false positive rate.
+            \item[$r$] The load factor.
+        \end{itemize}
+    }
+    \KwOut
+    {
+        The perfect map filter $\pmf(\Mt, \fprate, p, r)$.
+    }
+    \func{\MakeApproximateMap{$\Mt, \fprate \given r$}}
+    {
+        $N \gets \left\lceil \Card{\Mt} / r \right\rceil$\;
+        $M \gets \left\lceil -\log_2\!\left(\fprate\right) \right\rceil$\;
+        $\Set{S} \gets \{ k \colon (k,v) \in \Mt \}$\;
+        $\ph_{\Set{S}} \gets \phfgen(\Set{S}, N)$\;
+        $\matrx{V} \gets \text{$N$-by-$(M+p)$ zero bit matrix}$\;
+        \ForEach{$(k,v) \in \Mt$}
+        {
+            $i \gets \ph_{\Set{S}}\!\left(k\right)$\;
+            $h \gets \ro\!\left(k\right) \mod M$\;
+            $\matrx{V}\!\left[i\right] \gets \Concatenate\!\left(h, \Serialize_p(v)\right)$\;
+        }
+        $\pmapf(\Mt, \fprate, p, r) \gets \left\{\ph_{\Set{S}}, \fprate, \matrx{V}\right\}$\;
+        \Return $\pmapf(\Mt, \fprate, p, r)$\;
+    }
+\caption[Approximate map constructor]{\protect\pmapf implementation of \protect\MakeApproximateMap}
+\end{algorithm}
+
+The bit length of objects is given by the following definition.
+\begin{definition}
+The bit length of an object $x$ is denoted by
+\begin{equation}
+    \BL(x)\,.
+\end{equation}
+\end{definition}
+For example, the bit length of an object $x \in \BitSet^n$ is given by $\BL(x) = n$.
+The \emph{perfect map filter} is an extension of the \emph{perfect hash filter}\cite{phf}.
+
+\begin{theorem}
+The bit length of the \emph{minimal} perfect map filter $\pmapf(\Mt,\fprate,p)$ has a lower-bound given by
+\begin{equation}
+    1.44 m + p m - m \log_2 \fprate \; \si{bits}\,.
+\end{equation}
+\end{theorem}
+The proof trivially follows from the lower-bound given for the \emph{perfect hash filter}\cite{phf}.
+
+The perfect map filter asymptotically (with respect to $\fprate$) obtains the theoretical lower-bound for data structures that implement the abstract data type of \emph{approximate sets}. Thus, it must necessarily be asymptotically efficient over the abstract data type of \emph{approximate maps}. Indeed, it must be a \emph{succinct} data structure.
+
+\begin{conjecture}
+The \emph{fixed-value} \gls{gls-pmf} $\Set{T} \in \BitSet \times \BitSet_P$ with a load factor $r$ and false positive rate $\fprate$ has an encoding size given by
+\begin{equation}
+    \frac{P - \log_2 \fprate}{r} + 0.115 \cdot 12.55^r \; \si{bits \per element}\,.
+\end{equation}
+\end{conjecture}
+\end{document}

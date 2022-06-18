@@ -1,0 +1,78 @@
+\documentclass[ ../main.tex]{subfiles}
+\providecommand{\mainx}{..}
+\begin{document}
+\section{\emph{Guarded} approximate sets}
+\label{sec:guarded}
+An \emph{approximate set}\cite{oph} guarantees that no false negatives occur but false positives occur with a probability $\fprate$. Suppose we are interested in guaranteeing that no false positives nor false negatives occur over a \emph{guarded} set $\Set{G}$.
+
+The \emph{guarded approximate set} is given by the following definition.
+\begin{definition}
+Given a \emph{guarded set} $\Set{G} \supseteq \Set{S}$, the set $\Sg$ is a \emph{guarded approximate set} of $\Set{S}$ over $\Set{G}$ if the following conditions are satisfied:
+\begin{enumerate}
+    \item $\Set{S}$ is a subset of $\Sg$. This condition guarantees that no false negatives may occur.
+    \item $\left(\Set{G} \setminus \Set{S}\right) \cap \Sg = \emptyset$. This condition guarantees that no false positives may occur for any element in the \emph{guarded set} $\Set{G}$.
+    \item An element in $\setc{\Set{G}}$ is a member of $\Sg$ with a probability $\fprate$, denoted the \emph{false positive rate}.
+\end{enumerate}
+\end{definition}
+
+The abstract data type of the \emph{guarded approximate set} is given by the following definition.
+\begin{definition}
+The abstract data type of the \emph{guarded approximate set}
+\begin{enumerate}
+    \item \MakeGuardedApproximateSet{$\Set{S}$,$\Set{G}$,$\fprate$}. Returns a guarded approximate set $\Set{S}$ over $\Set{G} \supseteq \Set{S}$ with a false positive rate $\fprate$ on $\setc{\Set{G}}$.
+    \item \Contains{$\Sg$,$x$}. Returns \True if $x \in \Set{S}$ and \False if $x \in \Set{G} \setminus \Set{S}$. Otherwise, returns \True with probability $\fprate$ and \False with probability $1 - \fprate$.
+    \item \Insert{$\Sg$,$x$}. If $x \in \Set{G}$, returns an approximate guarded set of $\Set{S} \cup \{x\}$ over guarded set $\Set{G}$ with a false positive rate $\fprate$ on $\setc{\Set{G}}$.
+    \item \Delete{$\Sg$,$x$}. If $x \in \Set{G}$, returns an approximate guarded set of $\Set{S} \setminus \{x\}$ over guarded set $\Set{G}$ with a false positive rate $\fprate$ on $\setc{\Set{G}}$.
+\end{enumerate}
+\end{definition}
+
+If the universe of elements is finite and given by $\Set{U} \equiv \Set{G}$, then we may use a degenerate \emph{guarded approximate set} with a false positive rate $\fprate = 1$ to implement the abstract data type of the \emph{exact set}.
+
+
+
+
+ and the set is \emph{dense}
+
+The bit length of a \emph{minimal} perfect map filter implementing the \emph{exact} set has a lower-bound given by
+\begin{equation}
+    2.44 m \, \si{bits}\,,
+\end{equation}
+
+ and the set is \emph{dense}
+where $m = \Card{\Set{U}}$. Since false positives are not possible, $\Insert$ and $\Delete$ over the set $\Set{S} \cup \Set{M}$ may also be provided.\footnote{However, there are more efficient data structures to implement \emph{exact sets}.}
+
+\subsubsection*{Implementation}
+The \emph{guarded approximate set} may be implemented using the abstract data type of the \emph{approximate map} $\Mt \colon \Set{U} \mapsto \BitSet$, where for each element $x \in \Set{S}$,
+\begin{equation}
+    \Mt[x] = \True\,,
+\end{equation}
+and for each $x \in \Set{G} \setminus \Set{S}$,
+\begin{equation}
+    \Mt[x] = \False\,.
+\end{equation}
+The false positive rate $\fprate$ depends on the \emph{probability} of a membership test on the guarded set $\Set{G}$. Thus, if $\Mt[x] = 1$, element $x$ is a member of $\Set{S}$ with a false positive rate $\fprate$. If $\Mt[x] = \nullvalue$ or $\Mt[x] = 0$, it is certainly not a member of $\Set{S}$.
+
+\begin{theorem}
+The \gls{gls-pmf} may implement the \emph{guarded approximate set} abstract data type with a false positive rate given by
+\begin{equation}
+    \fprate = r 2^{-M}\,,
+\end{equation}
+where $r$ is the load factor and $M$ is the bit length of hashes stored in the matrix $\matrx{V}$ given by \Cref{alg:}
+\end{theorem}
+
+By \cref{dummyref}, the bit length is simply
+\begin{equation}
+    m_g \left(2.44 + \log_2 \frac{r}{\fprate}\right)\,.
+\end{equation}
+where $m_g = \Card{\Set{S} \cup \Set{G}}$.
+
+If we assume that  $r = 1$, the bit length is given by
+\begin{equation}
+    (m + g) \left(2.44 - \log_2 \fprate\right)\,.
+\end{equation}
+
+
+\begin{remark}
+If it is critical to guard against certain elements from testing as a false positives, this may be an appropriate abstract data type. The relatively slight reduction in the false positive rate is an added bonus. If the primary motivation is to reduce the false positive rate, this is (generally) more efficiently accomplished by using a data structure that efficiently implements the abstract data type of the \emph{approximate set}\footnote{Such as the perfect hash filter or the Bloom filter.} and specifying the desired positive rate.
+\end{remark}
+\end{document}

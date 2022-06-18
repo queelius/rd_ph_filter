@@ -1,0 +1,83 @@
+\documentclass[ ../main.tex]{subfiles}
+\providecommand{\mainx}{..}
+\begin{document}
+\section{Approximate hash map}
+If the input is not in the domain of definition, the approximate map outputs a random sequence of $d$ bits. If proportion $f$ of the bit patterns represent \emph{undefined}, then the probability that an element not in the domain of definition correctly maps to undefined is $f$ and the probability that it incorrectly maps to some valid value is $1-f$.
+
+
+
+The \emph{\gls{gls-pmf}} is a data structure given by the following definition.
+\begin{definition}
+The \emph{\gls{gls-pmf}} is a data structure that implements the abstract data type of the \emph{static approximate map} where both the \emph{keys} and \emph{values} are from the universe $\BitSet^*$.
+A \gls{gls-pmf} that approximates a map with $m$ keys, a \emph{mean} bit length per value $\mu$, false positive rate $\fprate$, and load factor $r$ is denoted by
+\begin{equation}
+    \pmapf(m, \mu, \fprate, r)\,.
+\end{equation}
+The \emph{minimal} \gls{gls-pmf} has load factor $r=1$ and may be denoted by $\pmapf(m,\mu,\fprate)$.
+\end{definition}
+
+%\begin{algorithm}[h]
+%    \caption{Theoretical implementation of \protect\MakeApproxMap}
+%    \label{alg:shmap}
+%    \SetKwProg{func}{function}{}{}
+%    \KwIn
+%    {
+%        $\Mt \in \cisb \times \cisb$ is the \emph{finite map} $\{(k_1,v_1),\ldots,(k_m,v_m)\}$ to approximate and $\fprate$ is the \emph{\gls{gls-fprate}}.
+%    }
+%    \KwOut
+%    {
+%        A \gls{gls-pmf} $\Mt^* \supset \Mt$ with a \gls{gls-fprate} $\fprate$.
+%    }
+%    \func{\MakeApproxMap{$\Mt$, $\fprate$}}
+%    {
+%        \tcp{Make a minimal perfect hash function for the keys.}
+%        $\Set{K} \gets \left\{k \colon (k,v) \in \Mt\right\}$\;
+%        $\ph_\Set{K} \colon \cisb \mapsto \Set{Z}^+ \gets$ \MakeMinimalPerfectHash{$\Set{K}$}\;        
+%        
+%        $k \gets \left\lceil \log_2 \frac{1}{\fprate} \right\rceil$\;
+%        $\matrx{V} \gets m$-by-$k$ bit matrix\;
+%        \For{$j \gets 1$ \KwTo $m$}
+%        {
+%            $\matrx{V}\!\left[\ph_\Set{K}(x_j)\right] \gets \hash(k_j) \mod k$\;
+%        }
+%        \For{$n \gets 0$ \KwTo $\infty$}
+%        {
+%            $\found \gets \True$\;
+%            \For{$j \gets 1$ \KwTo $2^n$}
+%            {
+%                $b_n \gets$ draw random bit string from $\cisb_n$ without replacement\;
+%                \For{$i \gets 1$ \KwTo $m$}
+%                {
+%                    \tcp{The value $v_j$ is \emph{self-delimiting code} so we
+%                    check that the first $\BL(v_j)$ bits of the hash is equal to $v_j$.}
+%                    \If{$\hash(k_j \catop b_n) \mod \BL(v_j^*) \neq v_j^*$}
+%                    {
+%                        \label{line:selfterm}
+%                        $\found \gets \False$\;
+%                        \Break\;
+%                    }
+%                }
+%                \If{\notfn \found}
+%                {
+%                    \Break\;
+%                }
+%            }
+%            \If{\found}
+%            {
+%                \tcp{This tuple codes the \gls{gls-pmf}.}
+%                \Return $(\matrx{V},b_n)$\;
+%            }
+%        }
+%    }
+%\end{algorithm}
+
+
+\subsection{Lower-bound on space complexity}
+
+
+
+\subsection{Upper-bound on entropy}
+
+
+
+\end{document}
