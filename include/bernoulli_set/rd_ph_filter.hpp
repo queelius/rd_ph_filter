@@ -24,22 +24,29 @@ namespace bernoulli
         auto perfect_hash_fn() const { return ph; }
         auto hash_fn() const { return ph.hash_fn(); }
 
+        /**
+         * @param begin start of elements to build a filter for
+         * @param end end of elements
+         * @param k false positive rate is given by 2^(-k)
+         * @tparam I mdoels the concept of a forward iterator
+         * @tparam Builder models the concept of a builder for PH
+         */
         template <typename I, typename Builder>
         rd_ph_filter(
             I begin,
             I end,
             size_t k,
-            Builder builder) : k(k), ph(builder(begin, end)
+            Builder builder) : k(k), ph(builder(begin, end))
         {
             hs.resize(ph.max());
             for (auto x = begin; x != end; ++x)
-                hs[ph(*x)] == ph.hash_fn(*x) % k;
+                hs[ph(*x)] = hash_fn(*x) % k;
         }
 
         template <typename X>
-        bool contains(X const & x) const
+        auto contains(X const & x) const
         {
-            return hs[ph(x)] == ph.hash_fn(x) % k;
+            return hs[ph(x)] == hash_fn(x) % k;
         }
 
         auto false_positive_rate() const
@@ -49,12 +56,12 @@ namespace bernoulli
 
         auto false_negative_rate() const
         {
-            return ph.error_rate();
+            return ph.error_rate()*(1-false_positive_rate());
         }
 
     private:
-        size_t k;
-        PH ph;
+        size_t const k;
+        PH const ph;
         std::vector<hash_type> hs;
     };
 
@@ -77,8 +84,7 @@ namespace bernoulli
                     rd_ph_filter<PH> const & rhs)
     {
         return (lhs.ph == rhs.ph) &&
-               (lhs.hs == rhs.hs) &&
-               (lhs.complement == rhs.complement);
+               (lhs.hs == rhs.hs);
     }
 
     template <typename PH>
