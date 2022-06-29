@@ -10,6 +10,7 @@
  */
 
 #include <vector>
+#include <limits>
 
 namespace bernoulli
 {
@@ -24,34 +25,34 @@ namespace bernoulli
         auto perfect_hash_fn() const { return ph; }
         auto hash_fn() const { return ph.hash_fn(); }
 
+        static auto build_filter(PH const & ph, I begin, I end)
+        {
+            std::vector<hash_type> hashes(ph.max_hash()+1);
+            for (auto x = begin; x != end; ++x)
+                hashes[ph(*x)] = ph.hash_fn(*x);
+            return hashes;
+        }
+
         /**
          * @param begin start of elements to build a filter for
          * @param end end of elements
-         * @param k false positive rate is given by 2^(-k)
          * @tparam I mdoels the concept of a forward iterator
          * @tparam Builder models the concept of a builder for PH
          */
         template <typename I, typename Builder>
-        rd_ph_filter(
-            I begin,
-            I end,
-            size_t k,
-            Builder builder) : k(k), ph(builder(begin, end))
-        {
-            hs.resize(ph.max());
-            for (auto x = begin; x != end; ++x)
-                hs[ph(*x)] = hash_fn(*x) % k;
-        }
+        rd_ph_filter(I begin, I end, Builder builder) :
+            ph(builder(begin, end)),
+            hashes(build_filter(ph,begin,end)) {}
 
         template <typename X>
         auto contains(X const & x) const
         {
-            return hs[ph(x)] == hash_fn(x) % k;
+            return hashes[ph(x)] == hash_fn(x);
         }
 
         auto false_positive_rate() const
         {
-            return std::pow(2.,-(double)k);
+            return 1.0 / std::numeric_limits<hash_type>::max();
         }
 
         auto false_negative_rate() const
@@ -60,9 +61,8 @@ namespace bernoulli
         }
 
     private:
-        size_t const k;
         PH const ph;
-        std::vector<hash_type> hs;
+        std::vector<hash_type> const hashes;
     };
 
 
