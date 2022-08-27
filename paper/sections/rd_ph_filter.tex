@@ -1,23 +1,30 @@
-\documentclass[ ../main.tex]{subfiles}
-\providecommand{\mainx}{..}
-\begin{document}
-\section{Perfect hash filter: a practical implementation of the random positive approximate set model}
-\label{sec:phf}
-\begin{notation}
-The \emph{bit set} $\{0,1\}$ is denoted by $\BitSet$. The set of all bit strings of length $n$ is the Cartesian product $\BitSet^n$ where $\Card{\BitSet^n} = 2^n$. The \emph{empty string} is denoted by $\epsilon$ where $\BitSet^0 = \{\epsilon\}$. The set of all bit strings of length $0$ to $n$ is denoted by $\BitSet^{\leq n} = \bigcup_{j=0}^{n} \BitSet^j$ where $\Card{\BitSet^{\leq n}} = 2^{n+1} - 1$. The countably infinite set of all bit strings (of any length) is denoted by $\BitSet^{*} = \lim_{n \to \infty} \BitSet^{\leq n}$.
-\end{notation}
+Rate-distorted perfect hash filter {#sec:phf}
+---------------------------------------------
 
-The \emph{Bloom filter}\cite{bf} is a well-known data structure that implements a \emph{random positive approximate set} over $\BitSet^{*}$ and obtains a space complexity given approximately by
+The set of all bit strings of length $n$ is the Cartesian product $\{0,1\}^n$ where $|\{0,1\}^n| = 2^n$.
+The *empty bit string* $\{0,1\}^0$ is denoted by $\epsilon$.
+The set of all bit strings of length $0$ to $n$ is denoted by
+$$
+\{0,1\}^{\leq n} = \bigcup_{j=0}^{n} \{0,1\}^j
+$$
+where $|\{0,1\}^{\leq n}| = 2^{n+1} - 1$.
+The countably infinite set of all bit strings (of any length) is denoted by
+$\{0,1\}^* = \lim_{n \to \infty} \{0,1\}^n$.
+
+The \emph{Bloom filter}\cite{bf} is a well-known data structure that models
+the concept of a \emph{Bernoulli set} over bit strings with a false positive
+rate $\varepsilon$ and a false negative rate $0$.
+It obtains a space complexity given approximately by
 \begin{equation}
-    -1.44 \log_2 \fprate \; \si{bits \per element}\,.
+    -1.44 \log_2 \varepsilon \; \si{bits \per element}.
 \end{equation}
 We consider an alternative data structure, denoted the \gls{gls-phf} that also implements the \emph{random positive approximate set} over $\BitSet^*$ and compares favorably to the Bloom filter in some ways.
 
 A hash function is related to countable sets $\BitSet^*$ and $\BitSet^n$ and is given by the following definition.
 \begin{definition}
-A \emph{hash function} $\hash \colon \BitSet^* \mapsto \BitSet^n$ is a function such that all bit strings of arbitrary-length are mapped (hashed) to bit strings of fixed-length $n$.
+A \emph{hash function} $h \colon \BitSet^* \mapsto \BitSet^n$ is a function such that all bit strings of arbitrary-length are mapped (hashed) to bit strings of fixed-length $n$.
 \end{definition}
-For a given $x \in \BitSet^*$, $y = \hash(x) \in \BitSet^*_n$ is denoted the \emph{hash} of $x$. The \gls{gls-phf} depends on a \gls{gls-ph} as given by the following definition.
+For a given $x \in \BitSet^*$, $y = h(x) \in \BitSet^*_n$ is denoted the \emph{hash} of $x$. The \gls{gls-phf} depends on a \gls{gls-ph} as given by the following definition.
 \begin{definition}
 A perfect hash function of the set $\Set{S}$, denoted by
 \begin{equation}
@@ -131,60 +138,56 @@ n 			& \coloneqq \min{\SetBuilder{ j \in \NatSet }{ \Set{Y}[j] \in \PS{\NatSet} 
 
 \COMMENT{
 \begin{algorithm}[h]
-    \caption{Implementation of $\protect\SetContains$}
+    \caption{Implementation of $\operatorname{contains} : 2^U \times U \mapsto \{0,1\}$}
     \label{alg:PHF_has}
     \SetKwProg{func}{function}{}{}
     \KwIn
     {
         \begin{enumerate}
-            \item[$\PASet{S}$] The \gls{gls-phf} data structure that approximates $\Set{S}$ with a false positive rate $\fprate$ and a load factor $r$.
-            \item[$x$] The bit string to test membership of in $\PASet{S}$.
+            \item[$s$] A rate-distorted perfect hash filter object.
+            \item[$x$] The object to test membership of in $s$.
         \end{enumerate}
     }
     \KwOut
     {
-        \True if $x \in \Set{S}$, otherwise \True with probability $\fprate$ and false with probability $1 - \fprate$.
+        \True if $x \in A$, otherwise \True with probability $\varepsilon$ and false with probability $1 - \varepsilon$.
     }
-    \func{$\SetContains[\PASet{S}][x]$}
+    \func{$\operatorname{contains}(A,x)$}
     {
-        $M \gets \Columns(\matrx{V})$\;
-        $N \gets \Rows(\matrx{V})$\;
-        $i \gets \ph_{\Set{S}}(x)$\;
-        $h \gets \hash(x) \mod N$\;
-        \Return row $i$ of $\matrx{V}$ is $h$\;
+        $V \gets \operatorname{get_bit_matrix}(A)$\;
+        $M \gets \operatorname{ncols}(V)$\;
+        $N \gets \operatorname{nrows}(V)$\;
+        $i \gets \ph_{A}(x)$\;
+        $h \gets \operatorname{hash}(x) \mod N$\;
+        \Return row $i$ of $V$ is $h$\;
     }
 \end{algorithm}
 }
 
 \begin{example}
-Consider a set $\Set{S} = \{x_1, x_2, x_3\}$ and suppose we wish to approximate this set with a false positive rate $\fprate = 2^{-3}$. The perfect hash filter depicted by \cref{fig:PHFilter} is a representation of this \emph{frozen approximate set}.
+Consider a set $A = \{x_1, x_2, x_3\}$ and suppose we wish to approximate this set with a false positive rate $\fprate = 2^{-3}$. The perfect hash filter depicted by \cref{fig:PHFilter} is a representation of this \emph{frozen approximate set}.
 \end{example}
 \begin{figure}
-\caption[Perfect hash filter]{A perfect hash filter implementing a static approximate set $\{x_1,x_2,x_3\}$ with a false positive rate $\fprate = 2^{-3}$ and a load factor $r = \frac{3}{5}$.}
+\caption[Perfect hash filter]{A rate-distorted perfect hash filter that models  $\{x_1,x_2,x_3\}$ with a false positive rate $2^{-3}$ and a load factor $\frac{3}{5}$.}
 \label{fig:PHFilter}
 \centering
 \input{img/phfilter.tex}
 \end{figure}
 
 We make the following set of assumptions. See \cite{oph} for more on these assumptions.
-\begin{assumption}
-The set $\Set{S}$ consists of $m$ elements, where each element is drawn uniformly at random without replacement from $\BitSet^*$.
-\end{assumption}
-\begin{assumption}
-The perfect hash function $\ph_{\Set{S}}$ approximates a random oracle.
-\end{assumption}
-\begin{assumption}
-\label{asm:ro}
-The hash function $\ro \colon \BitSet^* \mapsto \BitSet^*_n$ approximates a random oracle.
-\end{assumption}
 
-The \gls{gls-phf} is an implementation of a \emph{static approximate set} as given by the following theorem.
+    1. The set $A$ consists of $m$ elements, where each element is drawn uniformly at random without replacement from $\{0,1\}^*$.
+    2. The rate-distorted perfect hash function $\ph_{A}$ is a cryptographic hash function.
+    3. The hash function $\operatorname{hash} \colon \{0,1\}^* \mapsto \{0,1\}^k$ is a cryptographic hash function.
+
+The rate-distorted perfect hash filter models the concept of a Bernouilli set
+as given by the following theorem.
 \begin{theorem}
 \label{thm:fp_rate}
-A \gls{gls-phf} is an implementation of \emph{static approximate set} with a false positive rate that is a rational number given by
+A rate-distorted perfect hash filter model a Bernoulli set with a false positive rate
 \begin{equation}
 \label{eq:fp_rate}
-    \fprate \in \left\{ 2^{-k} \colon k \in \mathbb{Z}^+\right\} \subset \left(0, 1\right]\,.
+    \varepsilon \in \left\{ 2^{-k} \colon k \in \mathbb{Z}^+\right\} \subset \left(0, 1\right]\,.
 \end{equation}
 \end{theorem}
 \begin{proof}
@@ -195,16 +198,16 @@ For the \gls{gls-phf} to be an implementation of approximate set $\PASet{S} \sup
 \end{enumerate}
 
 First, we prove condition \ref{itm:fp_rate_1}. For some $x \in \BitStringSet$,
-let $i = \ph_{\Set{X}}(x)$. For $\SetContains[\PASet{S}][x]$ to return \True, row $\matrx{V}[i]$ must equal the hash given by \hash{$x$}. Since \ph$_{\Set{S}}$ perfectly hashes all $y \in \Set{S}$ and $x \in \Set{S}$, no other member of $\Set{S}$ hashes ?, and $\matrx{V}[i]$ is explicitly set to the hash $\hash(x)$ during the construction of the \gls{gls-phf} as given by \cref{alg:PHF}.
+let $i = \ph_{\Set{X}}(x)$. For $\SetContains[\PASet{S}][x]$ to return \True, row $\matrx{V}[i]$ must equal the hash given by h{$x$}. Since \ph$_{\Set{S}}$ perfectly hashes all $y \in \Set{S}$ and $x \in \Set{S}$, no other member of $\Set{S}$ hashes ?, and $\matrx{V}[i]$ is explicitly set to the hash $h(x)$ during the construction of the \gls{gls-phf} as given by \cref{alg:PHF}.
 
-Second, we prove condition \ref{itm:fp_rate_2}. Observe that $\ph_{\Set{S}}$ is a hash function that takes any $x \in \BitSet^*$ and maps it to an integer between $1$ and $N$. The corresponding row of $\matrx{V}$ consists of $M$ bits. There are $2^M$ possible bit strings of length $M$ and, by \cref{asm:ro}, \hash uniformly distributes over these possibilities. Thus, for $x \notin \Set{S}$, the probability that \hash{$x$} is equal to the corresponding $M$ bits is given by the false positive rate
+Second, we prove condition \ref{itm:fp_rate_2}. Observe that $\ph_{\Set{S}}$ is a hash function that takes any $x \in \BitSet^*$ and maps it to an integer between $1$ and $N$. The corresponding row of $\matrx{V}$ consists of $M$ bits. There are $2^M$ possible bit strings of length $M$ and, by \cref{asm:ro}, h uniformly distributes over these possibilities. Thus, for $x \notin \Set{S}$, the probability that h{$x$} is equal to the corresponding $M$ bits is given by the false positive rate
 \begin{equation}
 \fprate = 2^{-M}\,.
 \end{equation}
 Since $M$ is any non-negative integer, the false positive rate is given by \cref{eq:fp_rate}.
 \end{proof}
 
-\subsection{Space complexity}
+## Space complexity
 The minimum possible bit length of a data structure implementing the abstract data type of the \emph{approximate set} is given by the following postulate.
 \begin{postulate}
 \label{pst:approx_l_b}
@@ -559,4 +562,3 @@ The point at which they are equally efficient efficient is $\fprate \approx 2^{-
   \end{axis}
 \end{tikzpicture}
 \end{figure}
-\end{document}

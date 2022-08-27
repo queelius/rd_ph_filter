@@ -1,3 +1,6 @@
+/build* 
+/.vscode
+.clang-format
 # ignore all . files and . folders. note: .*/ ignores only .folders
 .*
 # except do not ignore .gitignore. note: may omit if .gitignore is explicitly
@@ -5,6 +8,7 @@
 !/.gitignore
 
 /build* 
+main.pdf
 *.log
 *.out
 *.fls
@@ -15,6 +19,7 @@
 *.bbl
 *.ind
 *.nlo
+*.slo
 /_minted*
 main.synctex.gz
 *.blg
@@ -29,6 +34,5 @@ main.synctex.gz
 *.glo
 *.gls
 *.ist
-*.mtc
-*.mtc0
-*.out
+*.xdy
+.Rproj.user

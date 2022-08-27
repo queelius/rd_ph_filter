@@ -27,7 +27,7 @@ struct rd_ph_filter {
     static auto build_filter(PH const& ph, I begin, I end)
     {
         std::vector<hash_type> hashes(ph.max_hash() + 1);
-        for (auto x = begin; x != end; ++x) hashes[ph(*x)] = ph.hash_fn()(*x);
+        for (auto x = begin; x != end; ++x) hashes[ph(*x)] = hash_fn()(*x);
         return hashes;
     }
 
@@ -48,7 +48,7 @@ struct rd_ph_filter {
      */
     template <typename I, typename Builder>
     rd_ph_filter(I begin, I end, Builder builder)
-        : ph(builder(ph,begin, end))
+        : ph(builder(begin, end))
         , hashes(build_filter(ph, begin, end))
     {
     }
@@ -92,7 +92,7 @@ auto fnr(rd_ph_filter<PH> const& s)
 }
 
 template <typename PH>
-auto contains(rd_ph_filter<PH> const& s, typename PH::value_type const & x)
+auto contains(rd_ph_filter<PH> const& s, auto const& x)
 {
     return s(x);
 }
