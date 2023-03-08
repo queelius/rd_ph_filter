@@ -53,16 +53,17 @@ struct rd_ph_filter {
     {
     }
 
+    /**
+     * @brief Test element x for membership in the set.
+     * 
+     * @tparam X 
+     * @param x 
+     * @return auto 
+     */
     template <typename X>
     auto operator()(X const& x) const
     {
         return hashes[ph(x)] == hash_fn(x);
-    }
-
-    template <typename X>
-    auto contains(X const& x) const
-    {
-        return operator()(x);
     }
 
     static auto fpr()
@@ -92,7 +93,7 @@ auto fnr(rd_ph_filter<PH> const& s)
 }
 
 template <typename PH>
-auto contains(rd_ph_filter<PH> const& s, auto const& x)
+auto is_member(auto const& x, rd_ph_filter<PH> const& s)
 {
     return s(x);
 }
