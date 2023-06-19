@@ -76,7 +76,7 @@ struct rd_ph_filter {
         return ph.error_rate() * (1 - fpr());
     }
 
-    PH const                     ph;
+    PH const ph;
     std::vector<hash_type> const hashes;
 };
 
